@@ -1,16 +1,17 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useEffect } from 'react';
-import { Header, Row } from 'src/components';
+import { Header, Hero, Row } from 'src/components';
+import { IMovie } from 'src/interfaces/app.interface';
 import { API_REQUEST } from 'src/services/api.service';
 
-export default function Home(props: HomeProps): JSX.Element {
+export default function Home({ trending }: HomeProps): JSX.Element {
   // useEffect(() => {
   //   fetch(API_REQUEST.trending)
   //     .then((res) => res.json())
   //     .then((data) => console.log(data));
   // }, []);
-  console.log(props);
+  console.log(trending[0].title);
   return (
     <div className="relative h-[200vh]">
       <Head>
@@ -22,7 +23,7 @@ export default function Home(props: HomeProps): JSX.Element {
       <Header />
 
       <main>
-        {/* Hero */}
+        <Hero trending={trending} />
         <section>
           {/* Row */}
           {/* BigRow */}
@@ -38,11 +39,11 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   const trending = await fetch(API_REQUEST.trending).then((res) => res.json());
   return {
     props: {
-      trending,
+      trending: trending.results,
     },
   };
 };
 
 interface HomeProps {
-  trending: any;
+  trending: IMovie[];
 }
