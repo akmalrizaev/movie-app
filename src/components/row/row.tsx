@@ -4,7 +4,7 @@ import { RowProps } from './row.props';
 import { AiFillCaretRight, AiFillCaretLeft } from 'react-icons/ai';
 import Thumbnail from '../thumbnail/thumbnail';
 
-const Row = ({ title, movies }: RowProps) => {
+const Row = ({ title, movies, isBig = false }: RowProps) => {
   const [moved, setMoved] = useState<boolean>(false);
   const carouselRef = useRef<HTMLDivElement>(null);
 
@@ -39,10 +39,12 @@ const Row = ({ title, movies }: RowProps) => {
         />
         <div
           ref={carouselRef}
-          className="flex items-center scrollbar-hide space-x-1 overflow-hidden overflow-x-scroll md:space-x-4"
+          className={`flex items-center scrollbar-hide ${
+            !isBig && 'space-x-1 md:space-x-4 '
+          }  overflow-hidden overflow-x-scroll `}
         >
           {movies.map((movie) => (
-            <Thumbnail key={movie.id} movie={movie} />
+            <Thumbnail key={movie.id} movie={movie} isBig={isBig} />
           ))}
         </div>
         <AiFillCaretRight
