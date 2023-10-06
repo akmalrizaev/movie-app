@@ -8,7 +8,7 @@ const Thumbnail = ({ movie, isBig = false }: ThumbnailProps) => {
     <div
       className={`relative ${
         isBig
-          ? 'h-[450px] md:h-[600px] min-w-[350px] md:min-w-[470px]'
+          ? 'h-[400px] md:h-[550px] min-w-[350px] md:min-w-[470px]'
           : 'h-[330px] md:h-[440px] min-w-[200px] md:min-w-[292px]'
       }    cursor-pointer transition duration-200 ease-out   md:hover:scale-110`}
     >

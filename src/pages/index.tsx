@@ -5,7 +5,16 @@ import { Header, Hero, Row } from 'src/components';
 import { IMovie } from 'src/interfaces/app.interface';
 import { API_REQUEST } from 'src/services/api.service';
 
-export default function Home({ trending, topRated }: HomeProps): JSX.Element {
+export default function Home({
+  trending,
+  topRated,
+  tvTopRated,
+  popular,
+  documentary,
+  comedy,
+  history,
+  family,
+}: HomeProps): JSX.Element {
   // useEffect(() => {
   //   fetch(API_REQUEST.trending)
   //     .then((res) => res.json())
@@ -27,7 +36,12 @@ export default function Home({ trending, topRated }: HomeProps): JSX.Element {
         <section>
           {/* Row */}
           <Row title="Top Rated" movies={topRated} />
-          <Row title="Tv Show" movies={topRated} isBig={true} />
+          <Row title="Tv Show" movies={tvTopRated} isBig={true} />
+          <Row title="Popular" movies={popular} />
+          <Row title="Documentary" movies={documentary} />
+          <Row title="History" movies={history} />
+          <Row title="Family" movies={family} />
+          <Row title="Comedy" movies={comedy} />
           {/* BigRow */}
           {/* Row */}
           {/* BigRow */}
@@ -40,10 +54,27 @@ export default function Home({ trending, topRated }: HomeProps): JSX.Element {
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   const trending = await fetch(API_REQUEST.trending).then((res) => res.json());
   const topRated = await fetch(API_REQUEST.top_rated).then((res) => res.json());
+  const tvTopRated = await fetch(API_REQUEST.tv_top_rated).then((res) =>
+    res.json()
+  );
+  const popular = await fetch(API_REQUEST.popular).then((res) => res.json());
+  const documentary = await fetch(API_REQUEST.documentary).then((res) =>
+    res.json()
+  );
+  const comedy = await fetch(API_REQUEST.comedy).then((res) => res.json());
+  const history = await fetch(API_REQUEST.history).then((res) => res.json());
+  const family = await fetch(API_REQUEST.family).then((res) => res.json());
+
   return {
     props: {
       trending: trending.results,
       topRated: topRated.results,
+      tvTopRated: tvTopRated.results,
+      popular: popular.results,
+      documentary: documentary.results,
+      comedy: comedy.results,
+      history: history.results,
+      family: family.results,
     },
   };
 };
@@ -51,4 +82,10 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
 interface HomeProps {
   trending: IMovie[];
   topRated: IMovie[];
+  tvTopRated: IMovie[];
+  popular: IMovie[];
+  documentary: IMovie[];
+  comedy: IMovie[];
+  history: IMovie[];
+  family: IMovie[];
 }
