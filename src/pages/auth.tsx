@@ -9,7 +9,7 @@ const Auth = () => {
     setAuth(state);
   };
   return (
-    <>
+    <div className="relative flex h-screen w-screen flex-col md:items-center md:justify-center bg-black md:bg-transparent">
       <Head>
         <title>Auth</title>
         <meta
@@ -19,6 +19,14 @@ const Auth = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <Image
+        src={'https://rb.gy/p2hphi'}
+        alt={'bg'}
+        fill
+        className="object-cover -z-10 !hidden sm:!inline opacity-60"
+      />
+
       <Image
         src={'/logo.svg'}
         alt={'logo'}
@@ -26,7 +34,7 @@ const Auth = () => {
         height={70}
         className={' absolute left-4 top-4 cursor-pointer object-contain'}
       />
-      <form className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:mx-14">
+      <form className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:px-14">
         <h1 className="text-4xl font-semibold">
           {auth === 'signup' ? 'Sign Up' : 'Sign In'}
         </h1>
@@ -78,7 +86,7 @@ const Auth = () => {
         )}
       </form>
       <AuthComponent />
-    </>
+    </div>
   );
 };
 
