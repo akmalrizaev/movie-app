@@ -1,12 +1,27 @@
 import { TextFieldProps } from './text-field.props';
-import { FieldHookConfig, useField } from 'formik';
+import { FieldHookConfig, useField, ErrorMessage } from 'formik';
 
 const TextField = ({ ...props }: TextFieldProps & FieldHookConfig<string>) => {
   const [field, meta, helpers] = useField(props);
   return (
-    <label className="inline-block w-full">
-      <input type="text" placeholder="Email" className="input" {...props} />
-    </label>
+    <div className="inline-block w-full">
+      <label
+        className={`inline-block w-full ${
+          meta.touched && meta.error && 'border-red-500 border-2'
+        }`}
+      >
+        <input
+          type="text"
+          placeholder="Email"
+          className="input"
+          {...props}
+          {...field}
+        />
+      </label>
+      <p className="text-red-500">
+        <ErrorMessage name={field.name} />
+      </p>
+    </div>
   );
 };
 

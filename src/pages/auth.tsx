@@ -4,15 +4,22 @@ import { useState } from 'react';
 import { TextField } from 'src/components';
 import AuthComponent from 'src/components/AuthComponent';
 import { Form, Formik } from 'formik';
+import * as Yup from 'yup';
 
 const Auth = () => {
   const [auth, setAuth] = useState<'signup' | 'signin'>('signin');
   const toggleAuth = (state: 'signup' | 'signin') => {
     setAuth(state);
   };
-  const onSubmit = (formData) => {
-    console.log(formData);
-  };
+  const onSubmit = (formData: { email: string; password: string }) => {};
+  const validation = Yup.object({
+    email: Yup.string()
+      .email('Enter valid email')
+      .required('Email is required'),
+    password: Yup.string()
+      .min(4, '4 minimum character')
+      .required('Password is required'),
+  });
   return (
     <div className="relative flex h-screen w-screen flex-col md:items-center md:justify-center bg-black md:bg-transparent">
       <Head>
@@ -43,7 +50,11 @@ const Auth = () => {
         <h1 className="text-4xl font-semibold">
           {auth === 'signup' ? 'Sign Up' : 'Sign In'}
         </h1>
-        <Formik initialValues={{ email: '', password: '' }} onSubmit={onSubmit}>
+        <Formik
+          initialValues={{ email: '', password: '' }}
+          onSubmit={onSubmit}
+          validationSchema={validation}
+        >
           <Form>
             <div className="space-y-4">
               <TextField name="email" placeholder="Email" type={'text'} />
