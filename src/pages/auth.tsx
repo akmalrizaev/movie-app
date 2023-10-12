@@ -1,12 +1,17 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
+import { TextField } from 'src/components';
 import AuthComponent from 'src/components/AuthComponent';
+import { Form, Formik } from 'formik';
 
 const Auth = () => {
   const [auth, setAuth] = useState<'signup' | 'signin'>('signin');
   const toggleAuth = (state: 'signup' | 'signin') => {
     setAuth(state);
+  };
+  const onSubmit = (formData) => {
+    console.log(formData);
   };
   return (
     <div className="relative flex h-screen w-screen flex-col md:items-center md:justify-center bg-black md:bg-transparent">
@@ -34,33 +39,40 @@ const Auth = () => {
         height={70}
         className={' absolute left-4 top-4 cursor-pointer object-contain'}
       />
-      <form className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:px-14">
+      <div className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:px-14">
         <h1 className="text-4xl font-semibold">
           {auth === 'signup' ? 'Sign Up' : 'Sign In'}
         </h1>
-        <div className="space-y-4">
-          <label className="inline-block w-full">
-            <input type="text" placeholder="Email" className="input" />
-          </label>
-          <label className="inline-block w-full">
+        <Formik initialValues={{ email: '', password: '' }} onSubmit={onSubmit}>
+          <Form>
+            <div className="space-y-4">
+              <TextField name="email" placeholder="Email" type={'text'} />
+              <TextField
+                name="password"
+                placeholder="Password"
+                type={'password'}
+              />
+              {/* <label className="inline-block w-full">
             <input type="password" placeholder="Password" className="input" />
-          </label>
-        </div>
-        {auth === 'signin' ? (
-          <button
-            type="submit"
-            className="w-full bg-[#E10856] py-3 font-semibold"
-          >
-            Sign In
-          </button>
-        ) : (
-          <button
-            type="submit"
-            className="w-full bg-[#E10856] py-3 font-semibold"
-          >
-            Sign Up
-          </button>
-        )}
+          </label> */}
+            </div>
+            {auth === 'signin' ? (
+              <button
+                type="submit"
+                className="w-full bg-[#E10856] py-3 font-semibold mt-4"
+              >
+                Sign In
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="w-full bg-[#E10856] py-3 font-semibold mt-4"
+              >
+                Sign Up
+              </button>
+            )}
+          </Form>
+        </Formik>
         {auth === 'signin' ? (
           <div className="text-[gray]">
             Not yet account?
@@ -84,7 +96,7 @@ const Auth = () => {
             </button>
           </div>
         )}
-      </form>
+      </div>
       <AuthComponent />
     </div>
   );
