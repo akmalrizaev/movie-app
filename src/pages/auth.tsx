@@ -1,23 +1,31 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { TextField } from 'src/components';
 import AuthComponent from 'src/components/AuthComponent';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { AuthContext } from 'src/context/auth.context';
 
 const Auth = () => {
   const [auth, setAuth] = useState<'signup' | 'signin'>('signin');
+  const { error, isLoading, logout, signIn, signUp } = useContext(AuthContext);
   const toggleAuth = (state: 'signup' | 'signin') => {
     setAuth(state);
   };
-  const onSubmit = (formData: { email: string; password: string }) => {};
+  const onSubmit = (formData: { email: string; password: string }) => {
+    if (auth === 'signup') {
+      signUp(formData.email, formData.password);
+    } else {
+      signIn(formData.email, formData.password);
+    }
+  };
   const validation = Yup.object({
     email: Yup.string()
       .email('Enter valid email')
       .required('Email is required'),
     password: Yup.string()
-      .min(4, '4 minimum character')
+      .min(6, '6 minimum character')
       .required('Password is required'),
   });
   return (
@@ -50,6 +58,9 @@ const Auth = () => {
         <h1 className="text-4xl font-semibold">
           {auth === 'signup' ? 'Sign Up' : 'Sign In'}
         </h1>
+        {error && (
+          <p className="text-red-500 font-semibold text-center">{error}</p>
+        )}
         <Formik
           initialValues={{ email: '', password: '' }}
           onSubmit={onSubmit}
@@ -67,21 +78,18 @@ const Auth = () => {
             <input type="password" placeholder="Password" className="input" />
           </label> */}
             </div>
-            {auth === 'signin' ? (
-              <button
-                type="submit"
-                className="w-full bg-[#E10856] py-3 font-semibold mt-4"
-              >
-                Sign In
-              </button>
-            ) : (
-              <button
-                type="submit"
-                className="w-full bg-[#E10856] py-3 font-semibold mt-4"
-              >
-                Sign Up
-              </button>
-            )}
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-[#E10856] py-3 font-semibold mt-4"
+            >
+              {isLoading
+                ? 'Loading...'
+                : auth === 'signin'
+                ? 'Sign In'
+                : 'Sign Up'}
+            </button>
           </Form>
         </Formik>
         {auth === 'signin' ? (
