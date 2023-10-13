@@ -6,13 +6,21 @@ import AuthComponent from 'src/components/AuthComponent';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { AuthContext } from 'src/context/auth.context';
+import { useRouter } from 'next/router';
 
 const Auth = () => {
   const [auth, setAuth] = useState<'signup' | 'signin'>('signin');
-  const { error, isLoading, logout, signIn, signUp } = useContext(AuthContext);
+  const { error, isLoading, signIn, signUp, user } = useContext(AuthContext);
   const toggleAuth = (state: 'signup' | 'signin') => {
     setAuth(state);
   };
+
+  const router = useRouter();
+
+  if (user) router.push('/');
+
+  if (!isLoading) return <>Loading...</>;
+
   const onSubmit = (formData: { email: string; password: string }) => {
     if (auth === 'signup') {
       signUp(formData.email, formData.password);
