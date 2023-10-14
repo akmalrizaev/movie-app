@@ -5,6 +5,7 @@ import { Header, Hero, Row } from 'src/components';
 import { AuthContext } from 'src/context/auth.context';
 import { IMovie } from 'src/interfaces/app.interface';
 import { API_REQUEST } from 'src/services/api.service';
+import { useInfoStore } from 'src/store';
 
 export default function Home({
   trending,
@@ -21,6 +22,8 @@ export default function Home({
   //     .then((res) => res.json())
   //     .then((data) => console.log(data));
   // }, []);
+
+  const { setModal, modal } = useInfoStore();
 
   const { isLoading } = useContext(AuthContext);
 
@@ -52,6 +55,7 @@ export default function Home({
           {/* BigRow */}
         </section>
       </main>
+      <button className="z-100" onClick={() => setModal(true)}></button>
     </div>
   );
 }
