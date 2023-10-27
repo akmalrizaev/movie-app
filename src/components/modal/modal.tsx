@@ -1,6 +1,6 @@
 import MiuModal from '@mui/material/Modal';
 import { useInfoStore } from 'src/store';
-import { FaPlay, FaTimes } from 'react-icons/fa';
+import { FaPause, FaPlay, FaTimes } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { Element } from 'src/interfaces/app.interface';
 import ReactPlayer from 'react-player';
@@ -11,6 +11,7 @@ import { AiOutlineCloseCircle, AiOutlineLike } from 'react-icons/ai';
 const Modal = () => {
   const [trailer, setTrailer] = useState<string>('');
   const [muted, setMuted] = useState<boolean>(true);
+  const [playing, setPlaying] = useState<boolean>(true);
 
   const { modal, setModal, currentMovie } = useInfoStore();
   const base_url = process.env.NEXT_PUBLIC_API_DOMAIN as string;
@@ -60,15 +61,27 @@ const Modal = () => {
             url={`https://www.youtube.com/watch?v=${trailer}`}
             width={'100%'}
             height={'100%'}
-            playing
+            playing={playing}
             style={{ position: 'absolute', top: 0, left: 0 }}
             muted={muted}
           />
           <div className="absolute bottom-10 left-10 right-10 flex w-full items-center justify-between px-18">
             <div className="flex space-x-2">
-              <button className="flex items-center gap-x-2 rounded bg-white px-8 py-2 text-xl font-bold text-black transition hover:bg-[#e6e6e6]">
-                <FaPlay className="h-7 w-7 textblack" />
-                Play
+              <button
+                onClick={() => setPlaying((prev) => !prev)}
+                className="flex items-center gap-x-2 rounded bg-white px-8 py-2 text-xl font-bold text-black transition hover:bg-[#e6e6e6]"
+              >
+                {playing ? (
+                  <>
+                    <FaPause />
+                    Pause
+                  </>
+                ) : (
+                  <>
+                    <FaPlay className="h-7 w-7 textblack" />
+                    Play
+                  </>
+                )}
               </button>
               <button className="modalButton">
                 <BiPlus className="w-7 h-7" />
