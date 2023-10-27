@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useEffect, useContext } from 'react';
-import { Header, Hero, Modal, Row } from 'src/components';
+import { Header, Hero, Modal, Row, SubscriptionPlan } from 'src/components';
 import { AuthContext } from 'src/context/auth.context';
 import { IMovie } from 'src/interfaces/app.interface';
 import { API_REQUEST } from 'src/services/api.service';
@@ -28,6 +28,10 @@ export default function Home({
   const { isLoading } = useContext(AuthContext);
 
   if (isLoading) return <>{null}</>;
+
+  const subscription = false;
+
+  if (!subscription) return <SubscriptionPlan />;
 
   return (
     <div
