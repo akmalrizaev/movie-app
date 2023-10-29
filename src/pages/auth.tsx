@@ -10,7 +10,8 @@ import { useRouter } from 'next/router';
 
 const Auth = () => {
   const [auth, setAuth] = useState<'signup' | 'signin'>('signin');
-  const { error, isLoading, signIn, signUp, user } = useContext(AuthContext);
+  const { error, isLoading, signIn, signUp, user, setIsLoading } =
+    useContext(AuthContext);
   const toggleAuth = (state: 'signup' | 'signin') => {
     setAuth(state);
   };
@@ -21,8 +22,15 @@ const Auth = () => {
 
   // if (isLoading) return <>Loading...</>;
 
-  const onSubmit = (formData: { email: string; password: string }) => {
+  const onSubmit = async (formData: { email: string; password: string }) => {
     if (auth === 'signup') {
+      setIsLoading(true);
+      const response = await fetch('/api/customer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email }),
+      });
+      await response.json();
       signUp(formData.email, formData.password);
     } else {
       signIn(formData.email, formData.password);
