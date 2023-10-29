@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useEffect, useContext } from 'react';
 import { Header, Hero, Modal, Row, SubscriptionPlan } from 'src/components';
 import { AuthContext } from 'src/context/auth.context';
-import { IMovie } from 'src/interfaces/app.interface';
+import { IMovie, Product } from 'src/interfaces/app.interface';
 import { API_REQUEST } from 'src/services/api.service';
 import { useInfoStore } from 'src/store';
 
@@ -16,6 +16,7 @@ export default function Home({
   comedy,
   history,
   family,
+  products,
 }: HomeProps): JSX.Element {
   // useEffect(() => {
   //   fetch(API_REQUEST.trending)
@@ -27,11 +28,11 @@ export default function Home({
 
   const { isLoading } = useContext(AuthContext);
 
-  if (isLoading) return <>{null}</>;
-
   const subscription = false;
 
-  if (!subscription) return <SubscriptionPlan />;
+  if (isLoading) return <>{null}</>;
+
+  if (!subscription) return <SubscriptionPlan products={products} />;
 
   return (
     <div
@@ -79,6 +80,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
     comedy,
     history,
     family,
+    products,
   ] = await Promise.all([
     fetch(API_REQUEST.trending).then((res) => res.json()),
     fetch(API_REQUEST.top_rated).then((res) => res.json()),
@@ -88,6 +90,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
     fetch(API_REQUEST.comedy).then((res) => res.json()),
     fetch(API_REQUEST.history).then((res) => res.json()),
     fetch(API_REQUEST.family).then((res) => res.json()),
+    fetch(API_REQUEST.products_list).then((res) => res.json()),
   ]);
 
   // const trending = await fetch(API_REQUEST.trending).then((res) => res.json());
@@ -113,6 +116,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
       comedy: comedy.results,
       history: history.results,
       family: family.results,
+      products: products.products.data,
     },
   };
 };
@@ -126,4 +130,5 @@ interface HomeProps {
   comedy: IMovie[];
   history: IMovie[];
   family: IMovie[];
+  products: Product[];
 }
