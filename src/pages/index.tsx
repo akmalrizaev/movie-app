@@ -17,6 +17,7 @@ export default function Home({
   history,
   family,
   products,
+  subscription,
 }: HomeProps): JSX.Element {
   // useEffect(() => {
   //   fetch(API_REQUEST.trending)
@@ -28,11 +29,9 @@ export default function Home({
 
   const { isLoading } = useContext(AuthContext);
 
-  const subscription = false;
-
   if (isLoading) return <>{null}</>;
 
-  if (!subscription) return <SubscriptionPlan products={products} />;
+  if (!subscription.length) return <SubscriptionPlan products={products} />;
 
   return (
     <div
@@ -70,7 +69,10 @@ export default function Home({
   );
 }
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+export const getServerSideProps: GetServerSideProps<HomeProps> = async ({
+  req,
+}) => {
+  const user_id = req.cookies.user_id;
   const [
     trending,
     topRated,
@@ -81,6 +83,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
     history,
     family,
     products,
+    subscription,
   ] = await Promise.all([
     fetch(API_REQUEST.trending).then((res) => res.json()),
     fetch(API_REQUEST.top_rated).then((res) => res.json()),
@@ -91,6 +94,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
     fetch(API_REQUEST.history).then((res) => res.json()),
     fetch(API_REQUEST.family).then((res) => res.json()),
     fetch(API_REQUEST.products_list).then((res) => res.json()),
+    fetch(`${API_REQUEST.subscription}/${user_id}`).then((res) => res.json()),
   ]);
 
   // const trending = await fetch(API_REQUEST.trending).then((res) => res.json());
@@ -117,6 +121,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
       history: history.results,
       family: family.results,
       products: products.products.data,
+      subscription: subscription.subscription.data,
     },
   };
 };
@@ -131,4 +136,5 @@ interface HomeProps {
   history: IMovie[];
   family: IMovie[];
   products: Product[];
+  subscription: string[];
 }

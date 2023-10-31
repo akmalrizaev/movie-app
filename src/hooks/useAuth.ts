@@ -8,6 +8,7 @@ import { auth } from 'src/firebase';
 import { useState } from 'react';
 import { async } from '@firebase/util';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 export const useAuth = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,6 +24,15 @@ export const useAuth = () => {
       .then((res) => {
         setUser(res.user);
         router.push('/');
+        fetch('/api/customer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: res.user.email,
+            user_id: res.user.uid,
+          }),
+        });
+        Cookies.set('user_id', res.user.uid);
         setIsLoading(true);
       })
       .catch((error) => setError(error.message))
@@ -36,6 +46,7 @@ export const useAuth = () => {
       .then((res) => {
         setUser(res.user);
         router.push('/');
+        Cookies.set('user_id', res.user.uid);
         setIsLoading(true);
       })
       .catch((error) => setError(error.message))
@@ -45,7 +56,10 @@ export const useAuth = () => {
   const logout = async () => {
     setIsLoading(true);
     signOut(auth)
-      .then(() => setUser(null))
+      .then(() => {
+        setUser(null);
+        Cookies.remove('user_id');
+      })
       .catch((error) => setError(error.message))
       .finally(() => setIsLoading(false));
   };
