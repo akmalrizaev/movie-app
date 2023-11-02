@@ -28,7 +28,7 @@ const MembershipPlan = ({ subscription }: MembershipPlanProps) => {
           onClick={openPortal}
           className="h-10 w-3/5 transition-all whitespace-nowrap bg-gray-300 py-2 text-sm font-medium text-black shadow-md hover:bg-gray-200 md:w-4/5"
         >
-          Cancel Membership
+          {isLoading ? 'Loading...' : 'Cancel Membership'}
         </button>
       </div>
       <div className="col-span-3">
@@ -58,18 +58,24 @@ const MembershipPlan = ({ subscription }: MembershipPlanProps) => {
             </p>
           </div>
           <div className="md:text-right">
-            <p onClick={openPortal} className="membershipLink">
-              Manage payment info
-            </p>
-            <p onClick={openPortal} className="membershipLink">
-              Add buckup payment method
-            </p>
-            <p onClick={openPortal} className="membershipLink">
-              Billing detail
-            </p>
-            <p onClick={openPortal} className="membershipLink">
-              Change billing day
-            </p>
+            {isLoading ? (
+              'Loading....'
+            ) : (
+              <>
+                <p onClick={openPortal} className="membershipLink">
+                  Manage payment info
+                </p>
+                <p onClick={openPortal} className="membershipLink">
+                  Add buckup payment method
+                </p>
+                <p onClick={openPortal} className="membershipLink">
+                  Billing detail
+                </p>
+                <p onClick={openPortal} className="membershipLink">
+                  Change billing day
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>
