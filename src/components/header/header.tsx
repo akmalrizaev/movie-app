@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from 'src/context/auth.context';
 import { useAuth } from 'src/hooks/useAuth';
+import NavMenu from '../nav-menu/nav-menu';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -36,6 +37,9 @@ const Header = () => {
           height={56}
           className={'cursor-pointer object-contain'}
         />
+
+        <NavMenu />
+
         <ul className="space-x-4 md:flex hidden">
           <li className="navLink">Home</li>
           <li className="navLink">Movies</li>
